@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Globalization;
 
 namespace Zhucai.LambdaParser
 {
@@ -1031,32 +1032,32 @@ namespace Zhucai.LambdaParser
             {
                 case 'l':
                 case 'L':
-                    constVal = long.Parse(val.Substring(0, val.Length - 1));
+                    constVal = long.Parse(val.Substring(0, val.Length - 1), CultureInfo.InvariantCulture);
                     break;
 
                 case 'm':
                 case 'M':
-                    constVal = decimal.Parse(val.Substring(0, val.Length - 1));
+                    constVal = decimal.Parse(val.Substring(0, val.Length - 1), CultureInfo.InvariantCulture);
                     break;
 
                 case 'f':
                 case 'F':
-                    constVal = float.Parse(val.Substring(0, val.Length - 1));
+                    constVal = float.Parse(val.Substring(0, val.Length - 1), CultureInfo.InvariantCulture);
                     break;
 
                 case 'd':
                 case 'D':
-                    constVal = double.Parse(val.Substring(0, val.Length - 1));
+                    constVal = double.Parse(val.Substring(0, val.Length - 1), CultureInfo.InvariantCulture);
                     break;
 
                 default:
                     if (val.IndexOf('.') >= 0)
                     {
-                        constVal = double.Parse(val);
+                        constVal = double.Parse(val, CultureInfo.InvariantCulture);
                     }
                     else
                     {
-                        constVal = long.Parse(val);
+                        constVal = long.Parse(val, CultureInfo.InvariantCulture);
                         if ((long)constVal <= (long)int.MaxValue && (long)constVal >= (long)int.MinValue)
                         {
                             constVal = (int)(long)constVal;
