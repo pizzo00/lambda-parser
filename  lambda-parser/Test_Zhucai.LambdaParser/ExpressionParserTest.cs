@@ -11,6 +11,75 @@ namespace Test_Zhucai.LambdaParser
     [TestClass()]
     public class ExpressionParserTest
     {
+
+        [TestMethod]
+        public void ParseDelegateTest_NumberParse()
+        {
+            //With .
+            {
+                var expected = ExpressionParser.Compile("() => -5.5 > -6.3").DynamicInvoke();
+                var actual = -5.5 > -6.3;
+                Assert.AreEqual(expected, actual);
+            }
+            {
+                var expected = ExpressionParser.Compile("() => -5.5m > -6.3m").DynamicInvoke();
+                var actual = -5.5m > -6.3m;
+                Assert.AreEqual(expected, actual);
+            }
+            {
+                var expected = ExpressionParser.Compile("() => -5.5f > -6.3f").DynamicInvoke();
+                var actual = -5.5f > -6.3f;
+                Assert.AreEqual(expected, actual);
+            }
+            {
+                var expected = ExpressionParser.Compile("() => -5.5d > -6.3d").DynamicInvoke();
+                var actual = -5.5f > -6.3f;
+                Assert.AreEqual(expected, actual);
+            }
+
+            //With ,
+            {
+                try
+                {
+                    var expected = ExpressionParser.Compile("() => -5.5 > -6,3").DynamicInvoke();
+                }
+                catch (Exception e)
+                {
+                    Assert.IsInstanceOfType(e, typeof(InvalidOperationException));
+                }
+            }
+            {
+                try
+                {
+                    var expected = ExpressionParser.Compile("() => -5.5m > -6,3m").DynamicInvoke();
+                }
+                catch (Exception e)
+                {
+                    Assert.IsInstanceOfType(e, typeof(InvalidOperationException));
+                }
+            }
+            {
+                try
+                {
+                    var expected = ExpressionParser.Compile("() => -5.5f > -6,3f").DynamicInvoke();
+                }
+                catch (Exception e)
+                {
+                    Assert.IsInstanceOfType(e, typeof(InvalidOperationException));
+                }
+            }
+            {
+                try
+                {
+                    var expected = ExpressionParser.Compile("() => -5.5d > -6,3d").DynamicInvoke();
+                }
+                catch (Exception e)
+                {
+                    Assert.IsInstanceOfType(e, typeof(InvalidOperationException));
+                }
+            }
+        }
+
         /// <summary>
         /// 数字运算
         /// </summary>
@@ -832,22 +901,22 @@ namespace Test_Zhucai.LambdaParser
                         Member1 = 9,
                     }.GetMemberAll();";
                 int expected = new Test_Zhucai.LambdaParser.TestClass()
-                    {
-                        Member1 = 3
-                    }.Member1 == 3 ? new Test_Zhucai.LambdaParser.TestClass[]
+                {
+                    Member1 = 3
+                }.Member1 == 3 ? new Test_Zhucai.LambdaParser.TestClass[]
                 {
                     new Test_Zhucai.LambdaParser.TestClass()
                     {
                         Member1 = 3
                     }
                 }[4 - 4].Member1 + 3 * new Test_Zhucai.LambdaParser.TestClass()
-                    {
-                        Member2 = 5
-                    }.Member2 : new Test_Zhucai.LambdaParser.TestClass()
-                    {
-                        Member2 = 5,
-                        Member1 = 9,
-                    }.GetMemberAll();
+                {
+                    Member2 = 5
+                }.Member2 : new Test_Zhucai.LambdaParser.TestClass()
+                {
+                    Member2 = 5,
+                    Member1 = 9,
+                }.GetMemberAll();
 
                 Func<int> func = ExpressionParser.Compile<Func<int>>(code);
                 int actual = func();
